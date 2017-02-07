@@ -18,7 +18,7 @@
 </head>
 <body>
 <center>
-	<h2>Welcome to the Identity Manager site</h2>
+	<h2> ${user}, welcome to the Identity Manager site</h2>
 	
 	<p style="color:green;" >${messages}</p>
 	

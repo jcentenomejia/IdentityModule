@@ -23,7 +23,7 @@ public class Authentication extends HttpServlet {
     }
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		JdbcDAO conx = null;
+		JdbcDAO conx;
 		
 		String user = request.getParameter("username");
 		String pass = request.getParameter("password");
@@ -51,6 +51,7 @@ public class Authentication extends HttpServlet {
 				e.printStackTrace();
 			}
 			
+			request.setAttribute("user", user);
 			request.setAttribute("identities", identities);
 			request.getRequestDispatcher("/IdentityManager.jsp").forward(request, response);
 				
