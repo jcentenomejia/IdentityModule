@@ -1,4 +1,4 @@
-package fr.epita.identitymodule.services;
+package fr.epita.identitymodule.business;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -23,7 +23,7 @@ public class Authentication extends HttpServlet {
     }
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		JdbcDAO conx;
+		JdbcDAO conx = null;
 		
 		String user = request.getParameter("username");
 		String pass = request.getParameter("password");
@@ -50,7 +50,6 @@ public class Authentication extends HttpServlet {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			
 			request.setAttribute("user", user);
 			request.setAttribute("identities", identities);
 			request.getRequestDispatcher("/IdentityManager.jsp").forward(request, response);

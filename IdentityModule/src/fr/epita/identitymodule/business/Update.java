@@ -1,4 +1,4 @@
-package fr.epita.identitymodule.services;
+package fr.epita.identitymodule.business;
 
 import java.io.IOException;
 import java.sql.SQLException;

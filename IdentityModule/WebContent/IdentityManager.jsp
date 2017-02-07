@@ -14,12 +14,18 @@
 		th, td {
 		    padding: 5px;  
 		}
+		 body{
+	        width:80%;
+	        margin-left:auto;
+	        margin-right:auto;
+	    }
 	</style>
 </head>
 <body>
-<center>
-	<h2> ${user}, welcome to the Identity Manager site</h2>
-	
+
+<div align="right">User: <font color="blue">${user}</font></div>
+<div align="center">
+	<h2>Welcome to the Identity Manager site</h2>
 	<p style="color:green;" >${messages}</p>
 	
 	<p>These are the identities, if you want to create a new one 
@@ -46,6 +52,6 @@
 		    </tr>
 		</c:forEach>
 	</table>
-</center>
+</div>
 </body>
 </html>

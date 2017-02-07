@@ -87,9 +87,9 @@ public class JdbcDAO {
 			
 		Connection connection = getConnection();
 
-		String sqlInstruction = "UPDATE IDENTITIES SET IDENTITY_DISPLAYNAME = ?, IDENTITY_EMAIL = ?, "
+		String query = "UPDATE IDENTITIES SET IDENTITY_DISPLAYNAME = ?, IDENTITY_EMAIL = ?, "
 				+ "IDENTITY_BIRTHDATE = ? WHERE IDENTITY_ID = ?";
-		PreparedStatement statement = connection.prepareStatement(sqlInstruction);
+		PreparedStatement statement = connection.prepareStatement(query);
 		statement.setString(1, identity.getDisplayname());
 		statement.setString(2, identity.getEmail());
 		statement.setString(3, identity.getBirthDate());
