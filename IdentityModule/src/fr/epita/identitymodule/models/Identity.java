@@ -5,13 +5,17 @@ public class Identity {
 	private String displayname;
 	private String email;
 	private String birthDate;
-
-	public Identity(String uid, String displayname, String email, String birthDate) {
+	private String password;
+	private String userType;
+	
+	public Identity(String uid, String displayname, String email, String birthDate, String password, String userType) {
 		
 		this.uid = uid;
 		this.displayname = displayname;
 		this.email = email;
 		this.birthDate = birthDate;
+		this.password = password;
+		this.userType = userType;
 	}
 
 	public String getUid() {
@@ -44,6 +48,22 @@ public class Identity {
 
 	public void setBirthDate(String birthDate) {
 		this.birthDate = birthDate;
+	}
+	
+	public void setPassword(String password){
+		this.password = password;
+	}
+	
+	public String getPassword(){
+		return this.password;
+	}
+	
+	public void setUserType(String userType){
+		this.userType = userType;
+	}
+	
+	public String getUserType(){
+		return this.userType;
 	}
 	
 	@Override

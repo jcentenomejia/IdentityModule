@@ -32,6 +32,19 @@
 				<td><input type="text" name="birthdate" placeholder="yyyy-mm-dd"></input></td>
 			</tr>
 			<tr>
+				<td>Password:</td>
+				<td><input type="password" name="password" ></input></td>
+			</tr>
+			<tr>
+				<td>User type:</td>
+				<td>
+					<select name="usertype">
+						<option value="admin">Admin</option>
+						<option value="user">User</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
 				<td></td>
 				<td><input type="submit" value="Submit"/></td>
 			</tr>

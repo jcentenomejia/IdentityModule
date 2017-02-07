@@ -35,7 +35,19 @@
 				<td>Birth date:</td>
 				<td><input type="text" name="birthdate" value="${birthdate }"></input></td>
 			</tr>
-			
+			<tr>
+				<td>Password:</td>
+				<td><input type="password" name="password" value="${password }"></input></td>
+			</tr>
+			<tr>
+				<td>User type:</td>
+				<td>
+					<select name="usertype" >
+						<option value="admin" ${usertype == 'admin' ? 'selected' : ''}>Admin</option>
+						<option value="user" ${usertype == 'user' ? 'selected' : ''}>User</option>
+					</select>
+				</td>
+			</tr>
 			<tr>
 				<td></td>
 				<td><input type="submit" value="Submit"/></td>

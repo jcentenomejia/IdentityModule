@@ -57,7 +57,10 @@ public class JdbcDAO {
 			String displayName = rs.getString("IDENTITY_DISPLAYNAME");
 			String email = rs.getString("IDENTITY_EMAIL");
 			String birthDate = rs.getString("IDENTITY_BIRTHDATE");
-			Identity identity = new Identity(String.valueOf(uid), displayName, email, birthDate);
+			String password = rs.getString("PASSWORD");
+			String usertype = rs.getString("USER_TYPE");
+			
+			Identity identity = new Identity(String.valueOf(uid), displayName, email, birthDate,password, usertype);
 			identities.add(identity);
 		}
 		releaseResources();
@@ -71,11 +74,13 @@ public class JdbcDAO {
 		Connection connection = getConnection();
 
 		String sqlInstruction = "INSERT INTO IDENTITIES(IDENTITY_DISPLAYNAME, IDENTITY_EMAIL, "
-				+ "IDENTITY_BIRTHDATE) VALUES(?,?,?)";
+				+ "IDENTITY_BIRTHDATE, PASSWORD, USER_TYPE) VALUES(?,?,?,?,?)";
 		PreparedStatement statement = connection.prepareStatement(sqlInstruction);
 		statement.setString(1, identity.getDisplayname());
 		statement.setString(2, identity.getEmail());
 		statement.setString(3, identity.getBirthDate());
+		statement.setString(4, identity.getPassword());
+		statement.setString(5, identity.getUserType());
 		statement.execute();
 		
 		releaseResources();
@@ -88,12 +93,14 @@ public class JdbcDAO {
 		Connection connection = getConnection();
 
 		String query = "UPDATE IDENTITIES SET IDENTITY_DISPLAYNAME = ?, IDENTITY_EMAIL = ?, "
-				+ "IDENTITY_BIRTHDATE = ? WHERE IDENTITY_ID = ?";
+				+ "IDENTITY_BIRTHDATE = ?, PASSWORD = ?, USER_TYPE = ? WHERE IDENTITY_ID = ?";
 		PreparedStatement statement = connection.prepareStatement(query);
 		statement.setString(1, identity.getDisplayname());
 		statement.setString(2, identity.getEmail());
 		statement.setString(3, identity.getBirthDate());
-		statement.setString(4, identity.getUid());
+		statement.setString(4, identity.getPassword());
+		statement.setString(5, identity.getUserType());
+		statement.setString(6, identity.getUid());
 		statement.execute();
 		
 		releaseResources();
@@ -114,13 +121,17 @@ public class JdbcDAO {
 		String user = "";
 		String email = "";
 		String birthdate = "";
+		String password = "";
+		String usertype = "";
 		
 		while(rs.next()){
 			user = rs.getString("IDENTITY_DISPLAYNAME");
 			email = rs.getString("IDENTITY_EMAIL");
 			birthdate = rs.getString("IDENTITY_BIRTHDATE");
+			password = rs.getString("PASSWORD");
+			usertype = rs.getString("USER_TYPE");
 		}
-		Identity identity = new Identity(uid,user,email,birthdate);
+		Identity identity = new Identity(uid,user,email,birthdate,password, usertype);
 		
 		statement.close();
 		releaseResources();
@@ -170,5 +181,34 @@ public class JdbcDAO {
 		
 		statement.close();
 		releaseResources();
+	}
+	
+	public Identity getIdentityFromUsername(String user) throws SQLException{
+		Connection connection = getConnection();
+		
+		String query = "select * from IDENTITIES where IDENTITY_DISPLAYNAME = ?";
+			
+		PreparedStatement statement = connection.prepareStatement(query);
+		statement.setString(1, user);
+			
+		ResultSet rs = statement.executeQuery();
+		String uid = "";
+		String email = "";
+		String birthdate = "";
+		String password = "";
+		String usertype = "";
+		
+		while(rs.next()){
+			uid = rs.getString("IDENTITY_ID");
+			email = rs.getString("IDENTITY_EMAIL");
+			birthdate = rs.getString("IDENTITY_BIRTHDATE");
+			password = rs.getString("PASSWORD");
+			usertype = rs.getString("USER_TYPE");
+		}
+		Identity identity = new Identity(uid,user,email,birthdate,password, usertype);
+		
+		statement.close();
+		releaseResources();
+		return identity;
 	}
 }

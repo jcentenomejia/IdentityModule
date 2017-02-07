@@ -24,35 +24,58 @@ public class Update extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		uid = request.getParameter("uid").toString();
-		JdbcDAO conx;
-		try {
-			conx = new JdbcDAO();
-			Identity identity = conx.getIdentity(uid);
+	
+		if(!permissionLoggedUser(request)){
+			JdbcDAO conx;
+			try {
+				conx = new JdbcDAO();
+				request.setAttribute("errors", "You don't have permissions to modify users!");
+				request.setAttribute("identities", conx.readAllIdentities());
+				request.getRequestDispatcher("/IdentityManager.jsp").forward(request, response);
+				return;
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
-			request.setAttribute("displayname", identity.getDisplayname());
-			request.setAttribute("email", identity.getEmail());
-			request.setAttribute("uid", uid);
-			request.setAttribute("birthdate", identity.getBirthDate());
-			
-			request.getRequestDispatcher("/Update.jsp").forward(request, response);
-		} catch (SQLException e) {
-			e.printStackTrace();
+		}else{
+		
+			uid = request.getParameter("uid").toString();
+			JdbcDAO conx;
+			try {
+				conx = new JdbcDAO();
+				Identity identity = conx.getIdentity(uid);
+				
+				request.setAttribute("displayname", identity.getDisplayname());
+				request.setAttribute("email", identity.getEmail());
+				request.setAttribute("uid", uid);
+				request.setAttribute("birthdate", identity.getBirthDate());
+				request.setAttribute("password", identity.getPassword());
+				request.setAttribute("usertype",identity.getUserType());
+				
+				request.getRequestDispatcher("/Update.jsp").forward(request, response);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 		String user = request.getParameter("displayname").toString();
 		String email = request.getParameter("email").toString();
 		String birthdate = request.getParameter("birthdate").toString();
+		String password = request.getParameter("password").toString();
+		String usertype = request.getParameter("usertype").toString();
 		
 		user = user.trim();
 		email = email.trim();
 		birthdate = birthdate.trim();
+		password = password.trim();
 		
-		Identity identity = new Identity(uid,user,email,birthdate);
+		Identity identity = new Identity(uid,user,email,birthdate,password,usertype);
 		
-		List<String> messages = validateFields(user,email,birthdate);
+		List<String> messages = validateFields(user,email,birthdate,password);
 		
 		if(!messages.isEmpty()){
 			request.setAttribute("messages", messages);
@@ -60,6 +83,7 @@ public class Update extends HttpServlet {
 			request.setAttribute("displayname", user);
 			request.setAttribute("email", email);
 			request.setAttribute("birthdate", birthdate);
+			request.setAttribute("usertype", usertype);
 			request.getRequestDispatcher("/Update.jsp").forward(request, response);
 			
 		}else{
@@ -79,9 +103,9 @@ public class Update extends HttpServlet {
 	}
 
 	//Validates the format of the String to match yyyy-mm-dd
-	public List<String> validateFields(String user, String email, String birthdate){
+	public List<String> validateFields(String user, String email, String birthdate, String password){
 		List<String> errors = new ArrayList<>();
-		if("".equals(user) || "".equals(email) || "".equals(birthdate)){
+		if("".equals(user) || "".equals(email) || "".equals(birthdate) || "".equals(password)){
 			errors.add("All fields must be filled.");
 		}
 		//validating date format
@@ -89,5 +113,13 @@ public class Update extends HttpServlet {
 		    errors.add("Wrong date format!");
 		}
 		return errors;
+	}
+	
+	public boolean permissionLoggedUser(HttpServletRequest request){
+		boolean resp = false;
+		if("admin".equals(request.getSession().getAttribute("type").toString())){
+			resp = true;
+		}
+		return resp;
 	}
 }

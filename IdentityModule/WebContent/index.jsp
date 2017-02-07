@@ -14,7 +14,7 @@
 			<h2>User Login</h2>
 			
 	        <p style="color:red;">${messages}</p>
-		    
+		    <p style="color:green;">${goods}</p>
 			<table width="30%" cellpadding="2">
 				<tr>
 					<td>User Name</td>

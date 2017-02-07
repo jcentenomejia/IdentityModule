@@ -23,13 +23,13 @@
 </head>
 <body>
 
-<div align="right">User: <font color="blue">${user}</font></div>
+<div align="right">User: <font color="blue"><%=session.getAttribute("loggedUser") %></font>, <a href="${pageContext.request.contextPath}/Logout">logout</a></div>
 <div align="center">
 	<h2>Welcome to the Identity Manager site</h2>
 	<p style="color:green;" >${messages}</p>
-	
+	<p style="color:red;" >${errors}</p>
 	<p>These are the identities, if you want to create a new one 
-		<a href="${pageContext.request.contextPath}/NewIdentity.jsp">click here</a>
+		<a href="${pageContext.request.contextPath}/AddIdentity">click here</a>
 	</p>
 	<table>
 		<thead>
@@ -38,6 +38,7 @@
 				<th>Display name</th>
 				<th>Email</th>
 				<th>Birth date</th>
+				<th>User type</th>
 				<th colspan="2">Action</th>
 		</tr>
 		</thead>
@@ -47,6 +48,7 @@
 		        <td>${identities.getDisplayname()}</td>
 		        <td>${identities.getEmail()}</td>
 		        <td>${identities.getBirthDate()}</td>
+		        <td>${identities.getUserType()}</td>
 		        <td><a href="${pageContext.request.contextPath}/Update?uid=${identities.getUid()}">update</a></td>
 		        <td><a href="${pageContext.request.contextPath}/Delete?uid=${identities.getUid()}">delete</a></td>
 		    </tr>

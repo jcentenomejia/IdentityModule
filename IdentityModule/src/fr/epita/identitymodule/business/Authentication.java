@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import fr.epita.identitymodule.models.Identity;
 import fr.epita.identitymodule.services.JdbcDAO;
@@ -45,13 +46,22 @@ public class Authentication extends HttpServlet {
 		
 		if(messages.isEmpty()){
 			List<Identity> identities = new ArrayList<>();
+			Identity temp = null;
+			
 			try {
 				identities = conx.readAllIdentities();
+				temp = conx.getIdentityFromUsername(user);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			request.setAttribute("user", user);
 			request.setAttribute("identities", identities);
+			
+			HttpSession session = request.getSession();
+			session.setAttribute("connecte", "true");
+			session.setAttribute("loggedUser", user);
+			session.setAttribute("type",temp.getUserType());
+			session.setAttribute("id",temp.getUid());
+			
 			request.getRequestDispatcher("/IdentityManager.jsp").forward(request, response);
 				
 		}else{
